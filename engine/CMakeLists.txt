@@ -10,6 +10,8 @@ add_subdirectory(external/glad)
 # GLFW
 include_directories(external/glfw/include)
 add_subdirectory(external/glfw)
+#Tell glfw not to include OpenGL
+add_compile_definitions(GLFW_INCLUDE_NONE)
 
 
 

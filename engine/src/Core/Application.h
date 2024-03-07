@@ -14,8 +14,9 @@ public:
     Application();
     ~Application();
 
-    inline Application& GetInstance() {return *sInstance;}
+    inline static Application& GetInstance() {return *sInstance;}
 
+    inline void StartClose() {mRunning = false;}
     void Run();
 
 
@@ -24,11 +25,13 @@ public:
 
 
 private:
-    Application* sInstance;
+    static Application* sInstance;
 
     bool mRunning = true;
 
     std::shared_ptr<Window> mWindow;
+
+    uint32_t mVA, mVB;
 
 };
 
