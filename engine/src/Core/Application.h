@@ -8,6 +8,9 @@
 
 #include <memory>
 #include "Window.h"
+#include "Shader.h"
+#include "Renderer/PerspectiveCameraController.h"
+#include "Events/ApplicationEvent.h"
 
 class Application {
 public:
@@ -17,11 +20,14 @@ public:
     inline static Application& GetInstance() {return *sInstance;}
 
     inline void StartClose() {mRunning = false;}
+    inline Window GetWindow() {return *mWindow;}
+
     void Run();
 
 
     void OnUpdate();
     void OnRender();
+    void OnEvent(Event &e);
 
 
 private:
@@ -31,8 +37,11 @@ private:
 
     std::shared_ptr<Window> mWindow;
 
-    uint32_t mVA, mVB;
+    std::shared_ptr<PerspectiveCameraController> mCameraController;
 
+    bool OnWindowClosed(WindowCloseEvent &e);
+
+    bool OnWindowResize(WindowResizeEvent &e);
 };
 
 

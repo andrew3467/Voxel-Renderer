@@ -7,21 +7,36 @@
 
 #include <cstdint>
 #include <string>
+#include <functional>
+#include "Events/Event.h"
 
 class GLFWwindow;
 
-struct WindowProps {
-    uint32_t Width = 1280;
-    uint32_t Height = 720;
-    std::string Title = "Voxel Renderer";
-};
-
 class Window {
 public:
+    using EventCallbackFn = std::function<void(Event&)>;
+
+    struct WindowProps {
+        uint32_t Width = 1280;
+        uint32_t Height = 720;
+        std::string Title = "Voxel Renderer";
+
+        EventCallbackFn EventCallback;
+    };
+
     Window(const WindowProps &props);
     ~Window();
 
     void OnUpdate();
+
+    inline void SetEventCallback(const EventCallbackFn &callback) {
+        mData.EventCallback = callback;
+    }
+
+    inline uint32_t GetWidth() const {return mData.Width;}
+    inline uint32_t GetHeight() const {return mData.Height;}
+
+    inline GLFWwindow* GetNativeWindow() const {return mWindow;}
 
 private:
     void Init();

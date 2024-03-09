@@ -7,6 +7,8 @@
 #include "GLFW/glfw3.h"
 #include "Glad/glad.h"
 #include "Application.h"
+#include "Events/ApplicationEvent.h"
+#include "Events/KeyEvent.h"
 
 
 static void GLFWErrorCallback(int error_code, const char* description){
@@ -60,6 +62,40 @@ void Window::Init() {
 
 void Window::SetupCallbacks() {
     glfwSetWindowCloseCallback(mWindow, [](GLFWwindow* window) {
-        Application::GetInstance().StartClose();
+        auto& data = *(WindowProps*)glfwGetWindowUserPointer(window);
+
+        WindowCloseEvent event;
+        data.EventCallback(event);
+    });
+
+    glfwSetWindowSizeCallback(mWindow, [](GLFWwindow* window, int width, int height) {
+        auto& data = *(WindowProps*)glfwGetWindowUserPointer(window);
+
+        data.Width = width;
+        data.Height = height;
+        WindowResizeEvent event(width, height);
+        data.EventCallback(event);
+    });
+
+    glfwSetKeyCallback(mWindow, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+        auto& data = *(WindowProps*)glfwGetWindowUserPointer(window);
+
+        switch (action) {
+            case GLFW_PRESS: {
+                KeyPressedEvent event(key, 0);
+                data.EventCallback(event);
+                break;
+            }
+            case GLFW_RELEASE: {
+                KeyReleasedEvent event(key);
+                data.EventCallback(event);
+                break;
+            }
+            case GLFW_REPEAT: {
+                KeyPressedEvent event(key, 1);
+                data.EventCallback(event);
+                break;
+            }
+        }
     });
 }

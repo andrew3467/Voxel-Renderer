@@ -13,6 +13,10 @@ add_subdirectory(external/glfw)
 #Tell glfw not to include OpenGL
 add_compile_definitions(GLFW_INCLUDE_NONE)
 
+# GLM
+include_directories(external/glm)
+add_subdirectory(external/glm)
+
 
 
 file(GLOB_RECURSE SRC src/*.cpp)
@@ -28,4 +32,5 @@ target_link_libraries(Voxel_Engine
         PUBLIC
         glad
         glfw
+        glm
 )
