@@ -24,8 +24,8 @@ public:
     void SetPosition(const glm::vec3 &position) {mPosition = position; RecalculateMatrices();}
     void SetRotation(const glm::vec3 &rotation);
 
-    void ProcessKeyboard(Camera_Movement direction, float deltaTime);
-    void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch = true);
+    void ProcessKeyboard(Camera_Movement direction, float deltaTime, float moveSpeed);
+    void ProcessMouseMovement(float xoffset, float yoffset,  float sensitivity, bool constrainPitch = true);
     void ProcessMouseScroll(float yoffset);
 
     inline const glm::mat4& GetViewProjection() const {return mViewProjection;}
@@ -52,9 +52,6 @@ private:
 
     float mYaw = -90.0f;
     float mPitch = 0.0f;
-
-    float mMoveSpeed = 2.0f;
-    float mSensitivity = 0.1f;
 };
 
 

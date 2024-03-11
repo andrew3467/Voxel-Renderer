@@ -54,9 +54,9 @@ void PerspectiveCamera::SetRotation(const glm::vec3 &rotation) {
     mUp = glm::normalize(glm::cross(mRight, mFront));
 }
 
-void PerspectiveCamera::ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch) {
-    xoffset *= mSensitivity;
-    yoffset *= mSensitivity;
+void PerspectiveCamera::ProcessMouseMovement(float xoffset, float yoffset, float sensitivity, bool constrainPitch) {
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
 
     mYaw += xoffset;
     mPitch += yoffset;
@@ -70,8 +70,8 @@ void PerspectiveCamera::ProcessMouseMovement(float xoffset, float yoffset, bool 
     RecalculateMatrices();
 }
 
-void PerspectiveCamera::ProcessKeyboard(Camera_Movement direction, float deltaTime) {
-    float velocity = mMoveSpeed * deltaTime;
+void PerspectiveCamera::ProcessKeyboard(Camera_Movement direction, float deltaTime, float moveSpeed) {
+    float velocity = moveSpeed * deltaTime;
     if (direction == FORWARD)
         mPosition += mFront * velocity;
     if (direction == BACKWARD)
@@ -80,6 +80,8 @@ void PerspectiveCamera::ProcessKeyboard(Camera_Movement direction, float deltaTi
         mPosition -= mRight * velocity;
     if (direction == RIGHT)
         mPosition += mRight * velocity;
+
+    RecalculateMatrices();
 }
 
 void PerspectiveCamera::ProcessMouseScroll(float yoffset) {

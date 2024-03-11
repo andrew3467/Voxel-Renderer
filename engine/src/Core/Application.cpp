@@ -32,7 +32,7 @@ Application::Application() {
     mWindow = std::make_shared<Window>(Window::WindowProps());
     mWindow->SetEventCallback(BIND_EVENT_FUNC(Application::OnEvent));
 
-    mCameraController = std::make_shared<PerspectiveCameraController>();
+    mCameraController = std::make_shared<PerspectiveCameraController>(0.5f, 0.25f);
 
     Renderer::Init();
 }

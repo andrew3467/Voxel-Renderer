@@ -13,7 +13,7 @@
 
 class PerspectiveCameraController {
 public:
-    PerspectiveCameraController();
+    PerspectiveCameraController(float moveSpeed, float sensitivity);
     ~PerspectiveCameraController();
 
     inline PerspectiveCamera& GetCamera() const {return *mCamera;}
@@ -26,6 +26,12 @@ private:
 
 private:
     std::shared_ptr<PerspectiveCamera> mCamera;
+
+    float mMoveSpeed;
+    float mSensitivity;
+
+    float mLastX, mLastY;
+    bool mFirstMouse = true;
 };
 
 

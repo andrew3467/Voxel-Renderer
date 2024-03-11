@@ -4,11 +4,12 @@
 
 #include <iostream>
 #include "Window.h"
-#include "GLFW/glfw3.h"
-#include "Glad/glad.h"
 #include "Application.h"
 #include "Events/ApplicationEvent.h"
 #include "Events/KeyEvent.h"
+
+#include <GLFW/glfw3.h>
+#include <Glad/glad.h>
 
 
 static void GLFWErrorCallback(int error_code, const char* description){
@@ -22,8 +23,7 @@ Window::Window(const WindowProps &props)
 }
 
 Window::~Window() {
-    glfwDestroyWindow(mWindow);
-    glfwTerminate();
+
 }
 
 void Window::OnUpdate() {
@@ -34,9 +34,7 @@ void Window::OnUpdate() {
 void Window::Init() {
     glfwSetErrorCallback(GLFWErrorCallback);
 
-    int success = glfwInit();
-
-    if(!success){
+    if(!glfwInit()){
         std::cerr << "Error: Failed to initialize GLFW!\n";
     }
 
