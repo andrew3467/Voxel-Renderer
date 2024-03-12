@@ -32,7 +32,7 @@ Application::Application() {
     mWindow = std::make_shared<Window>(Window::WindowProps());
     mWindow->SetEventCallback(BIND_EVENT_FUNC(Application::OnEvent));
 
-    mCameraController = std::make_shared<PerspectiveCameraController>(0.5f, 0.25f);
+    mCameraController = std::make_shared<PerspectiveCameraController>(10.0f, 20.0f);
 
     Renderer::Init();
 }
@@ -53,7 +53,11 @@ void Application::Run() {
 }
 
 void Application::OnUpdate() {
-    mCameraController->ProcessInput(1);
+    float time = (float)glfwGetTime();
+    mDeltaTime = time - mLastFrame;
+    mLastFrame = time;
+
+    mCameraController->ProcessInput(mDeltaTime);
 }
 
 void Application::OnRender() {
@@ -64,6 +68,7 @@ void Application::OnRender() {
 
     Renderer::DrawSquare(glm::vec3(0.0f), glm::vec3(1.0f), glm::vec3(0.2f, 0.3f, 0.8f));
     Renderer::DrawSquare(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.5f), glm::vec3(0.3f, 0.8f, 0.2f));
+    Renderer::DrawCube(glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(1.0f), glm::vec3(0.8f, 0.3f, 0.2f));
 }
 
 void Application::OnEvent(Event &e) {

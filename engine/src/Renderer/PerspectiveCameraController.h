@@ -31,7 +31,9 @@ private:
     float mSensitivity;
 
     float mLastX, mLastY;
+
     bool mFirstMouse = true;
+    bool mFirstScrollDown = true;
 };
 
 

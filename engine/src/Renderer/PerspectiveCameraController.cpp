@@ -4,6 +4,7 @@
 
 #include "PerspectiveCameraController.h"
 #include "Core/Input.h"
+#include "Core/Application.h"
 
 #include <GLFW/glfw3.h>
 
@@ -40,14 +41,34 @@ void PerspectiveCameraController::KeyboardInput(float ts) {
 }
 
 void PerspectiveCameraController::MouseInput(float ts) {
-    auto [x,y]  = Input::GetMousePos();
 
-    if(mFirstMouse){
+    if(Input::IsMouseButtonPressed(GLFW_MOUSE_BUTTON_MIDDLE)){
+        Application::GetInstance().GetWindow().ToggleCursor(false);
+        auto [x, y] = Input::GetMousePos();
+
+        if (mFirstMouse) {
+            mLastX = x;
+            mLastY = y;
+
+            mFirstMouse = false;
+        }
+
+        if(mFirstScrollDown){
+            Input::SetMousePos(mLastX, mLastY);
+            mFirstScrollDown = false;
+        }
+
+        float xOffset = x - mLastX;
+        float yOffset = mLastY - y;
+
         mLastX = x;
         mLastY = y;
 
-        mFirstMouse = false;
+        mCamera->ProcessMouseMovement(xOffset, yOffset, mSensitivity * ts);
+    }else{
+        Application::GetInstance().GetWindow().ToggleCursor(true);
+        if(!mFirstScrollDown){
+            mFirstScrollDown = true;
+        }
     }
-
-    mCamera->ProcessMouseMovement(x - mLastX, y- mLastY, mSensitivity * ts);
 }

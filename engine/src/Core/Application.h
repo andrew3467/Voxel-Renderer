@@ -39,8 +39,11 @@ private:
 
     std::shared_ptr<PerspectiveCameraController> mCameraController;
 
-    bool OnWindowClosed(WindowCloseEvent &e);
+    //TODO: Move into separate class
+    float mLastFrame = 0.0f;
+    float mDeltaTime = 0.0f;
 
+    bool OnWindowClosed(WindowCloseEvent &e);
     bool OnWindowResize(WindowResizeEvent &e);
 };
 

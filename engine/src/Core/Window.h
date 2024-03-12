@@ -33,6 +33,8 @@ public:
         mData.EventCallback = callback;
     }
 
+    inline void ToggleCursor(bool toggle);
+
     inline uint32_t GetWidth() const {return mData.Width;}
     inline uint32_t GetHeight() const {return mData.Height;}
 
@@ -43,6 +45,8 @@ private:
 
     void SetupCallbacks();
 private:
+    bool mCursorEnabled;
+
     GLFWwindow* mWindow;
 
     WindowProps mData;

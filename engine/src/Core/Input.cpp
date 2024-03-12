@@ -34,3 +34,8 @@ std::pair<float, float> Input::GetMousePos() {
     glfwGetCursorPos(window, &xpos, &ypos);
     return { xpos, ypos };
 }
+
+void Input::SetMousePos(float x, float y) {
+    auto window = static_cast<GLFWwindow*>(Application::GetInstance().GetWindow().GetNativeWindow());
+    glfwSetCursorPos(window, x, y);
+}

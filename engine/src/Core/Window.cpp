@@ -20,6 +20,7 @@ Window::Window(const WindowProps &props)
     : mData(props)
 {
     Init();
+    ToggleCursor(true);
 }
 
 Window::~Window() {
@@ -96,4 +97,10 @@ void Window::SetupCallbacks() {
             }
         }
     });
+}
+
+void Window::ToggleCursor(bool toggle) {
+    mCursorEnabled = toggle;
+
+    glfwSetInputMode(mWindow, GLFW_CURSOR, toggle ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
 }

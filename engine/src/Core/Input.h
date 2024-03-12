@@ -15,6 +15,7 @@ public:
 
     static float GetMouseX();
     static float GetMouseY();
+    static void SetMousePos(float x, float y);
     static std::pair<float, float> GetMousePos();
 };
 

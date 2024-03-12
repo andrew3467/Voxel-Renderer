@@ -9,6 +9,7 @@
 
 struct RendererData {
     uint32_t SquareVertexArray;
+    uint32_t CubeVertexArray;
 
     std::shared_ptr<Shader> Shader;
 };
@@ -21,6 +22,7 @@ void Renderer::Init() {
 
 
     {
+        //Size: count * sizeof(vertex)
         float squareVertices[6 * 5] = {
                 -0.5f, -0.5f, 0.0f,              0.0f, 0.0f,
                 -0.5f, 0.5f, 0.0f,               0.0f, 1.0f,
@@ -39,6 +41,68 @@ void Renderer::Init() {
         glGenBuffers(1, &VB);
         glBindBuffer(GL_ARRAY_BUFFER, VB);
         glBufferData(GL_ARRAY_BUFFER, sizeof(squareVertices), squareVertices, GL_STATIC_DRAW);
+
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)0);
+
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)(sizeof(float)* 3));
+    }
+
+    {
+        //Size: count * sizeof(vertex)
+        float cubeVertices[36 * 5] = {
+                -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+                0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+                0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+                0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+                -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+                -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+                -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+                0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+                0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+                0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+                -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+                -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+                -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+                -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+                -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+                -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+                -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+                -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+                0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+                0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+                0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+                0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+                0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+                0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+                -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+                0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+                0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+                0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+                -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+                -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+                -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+                0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+                0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+                0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+                -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+                -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+        };
+
+
+        glGenVertexArrays(1, &sData->CubeVertexArray);
+        glBindVertexArray(sData->CubeVertexArray);
+
+        uint32_t VB;
+        glGenBuffers(1, &VB);
+        glBindBuffer(GL_ARRAY_BUFFER, VB);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*)0);
@@ -80,4 +144,17 @@ void Renderer::StartScene(const PerspectiveCamera &camera) {
 
 void Renderer::OnWindowResize(unsigned int width, unsigned int height) {
     glViewport(0, 0, width, height);
+}
+
+void Renderer::DrawCube(const glm::vec3 &position, const glm::vec3 &scale, const glm::vec3 &color) {
+    auto transform = glm::translate(glm::mat4(1.0f), position) *
+                     glm::scale(glm::mat4(1.0f), scale);
+
+    sData->Shader->Bind();
+    sData->Shader->SetFloat3("uColor", color);
+    sData->Shader->SetMat4("uTransform", transform);
+
+
+    glBindVertexArray(sData->CubeVertexArray);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
 }

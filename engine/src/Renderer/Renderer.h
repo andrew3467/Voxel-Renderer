@@ -21,6 +21,7 @@ public:
     static void StartScene(const PerspectiveCamera &camera);
 
     static void DrawSquare(const glm::vec3 &position, const glm::vec3 &scale, const glm::vec3 &color);
+    static void DrawCube(const glm::vec3 &position, const glm::vec3 &scale, const glm::vec3 &color);
 
     static void OnWindowResize(unsigned int width, unsigned int height);
 };
