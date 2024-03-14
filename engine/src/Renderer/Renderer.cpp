@@ -158,3 +158,22 @@ void Renderer::DrawCube(const glm::vec3 &position, const glm::vec3 &scale, const
     glBindVertexArray(sData->CubeVertexArray);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 }
+
+void Renderer::DrawSquare(const glm::vec3 &color, const glm::mat4 &transform) {
+    sData->Shader->Bind();
+    sData->Shader->SetFloat3("uColor", color);
+    sData->Shader->SetMat4("uTransform", transform);
+
+
+    glBindVertexArray(sData->SquareVertexArray);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+void Renderer::Submit(uint32_t vertexArray, uint32_t count, const glm::vec3 &color, const glm::mat4 &transform) {
+    sData->Shader->Bind();
+    sData->Shader->SetFloat3("uColor", color);
+    sData->Shader->SetMat4("uTransform", transform);
+
+    glBindVertexArray(vertexArray);
+    glDrawArrays(GL_TRIANGLES, 0, count);
+}

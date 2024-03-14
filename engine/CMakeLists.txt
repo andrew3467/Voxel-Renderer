@@ -17,6 +17,9 @@ add_compile_definitions(GLFW_INCLUDE_NONE)
 include_directories(external/glm)
 add_subdirectory(external/glm)
 
+# FastNoise
+include_directories(external/FastNoiseLite/include)
+
 
 
 file(GLOB_RECURSE SRC src/*.cpp)
@@ -26,6 +29,7 @@ file(GLOB_RECURSE HEADERS src/*.h)
 add_library(Voxel_Engine
     ${SRC}
     ${HEADERS}
+        external/FastNoiseLite/include/fastnoiselite/FastNoiseLite.h
 )
 
 target_link_libraries(Voxel_Engine

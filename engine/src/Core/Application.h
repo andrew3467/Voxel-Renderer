@@ -11,6 +11,8 @@
 #include "Shader.h"
 #include "Renderer/PerspectiveCameraController.h"
 #include "Events/ApplicationEvent.h"
+#include "Terrain/Chunk.h"
+#include "Terrain/Level.h"
 
 class Application {
 public:
@@ -42,6 +44,8 @@ private:
     //TODO: Move into separate class
     float mLastFrame = 0.0f;
     float mDeltaTime = 0.0f;
+
+    Level mLevel;
 
     bool OnWindowClosed(WindowCloseEvent &e);
     bool OnWindowResize(WindowResizeEvent &e);

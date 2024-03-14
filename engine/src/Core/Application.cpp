@@ -7,6 +7,7 @@
 #include "Glad/glad.h"
 #include "Renderer/Renderer.h"
 #include "Events/ApplicationEvent.h"
+#include "Core/Input.h"
 
 
 static void GLClearError() {
@@ -26,6 +27,8 @@ static void GLCheckError() {
 
 Application* Application::sInstance = nullptr;
 
+bool sWireFrameMode = false;
+
 Application::Application() {
     sInstance = this;
 
@@ -35,6 +38,8 @@ Application::Application() {
     mCameraController = std::make_shared<PerspectiveCameraController>(10.0f, 20.0f);
 
     Renderer::Init();
+
+    mLevel.CreateChunks();
 }
 
 
@@ -58,6 +63,13 @@ void Application::OnUpdate() {
     mLastFrame = time;
 
     mCameraController->ProcessInput(mDeltaTime);
+
+    if(Input::IsKeyPressed(GLFW_KEY_SPACE)){
+        sWireFrameMode = !sWireFrameMode;
+        glPolygonMode(GL_FRONT_AND_BACK,
+                      sWireFrameMode ? GL_LINE : GL_FILL
+                      );
+    }
 }
 
 void Application::OnRender() {
@@ -66,9 +78,7 @@ void Application::OnRender() {
 
     Renderer::StartScene(mCameraController->GetCamera());
 
-    Renderer::DrawSquare(glm::vec3(0.0f), glm::vec3(1.0f), glm::vec3(0.2f, 0.3f, 0.8f));
-    Renderer::DrawSquare(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.5f), glm::vec3(0.3f, 0.8f, 0.2f));
-    Renderer::DrawCube(glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(1.0f), glm::vec3(0.8f, 0.3f, 0.2f));
+    mLevel.RenderChunks();
 }
 
 void Application::OnEvent(Event &e) {

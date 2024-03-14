@@ -19,7 +19,7 @@ PerspectiveCamera::PerspectiveCamera()
 }
 
 PerspectiveCamera::PerspectiveCamera(const glm::vec3 &position, float aspect)
-    : mAspect(aspect), mNear(0.1f), mFar(100.0f)
+    : mAspect(aspect), mNear(0.1f), mFar(1000.0f)
 {
     mProjection = glm::perspective(glm::radians(mFOV), mAspect, mNear, mFar);
 
